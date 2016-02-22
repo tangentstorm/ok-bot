@@ -10,9 +10,12 @@ var client = new irc.Client('irc.freenode.net', 'ok-bot', {
   channels: ['#jsoftware', '#learnprogramming', '#kq']
 });
 
+var env = ok.baseEnv();
+
 function runK(src) {
-  return ok.format(ok.run(ok.parse(src), ok.baseEnv()));
+  return ok.format(ok.run(ok.parse(src), env));
 }
+
 
 client.addListener('message', (from, to, msg)=> {
   if (to.startsWith('#') && msg.startsWith('k ')) {
