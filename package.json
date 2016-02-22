@@ -1,0 +1,22 @@
+{
+  "name": "ok-bot",
+  "version": "0.0.1",
+  "description": "simple IRC bot for the k5 language.",
+  "main": "ok-bot.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tangentstorm/ok-bot.git"
+  },
+  "keywords": [
+    "irc",
+    "k5",
+    "ok",
+    "k"
+  ],
+  "author": "michal j. wallace",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tangentstorm/ok-bot/issues"
+  },
+  "homepage": "https://github.com/tangentstorm/ok-bot#readme"
+}

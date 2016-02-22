@@ -2,7 +2,7 @@
 // using oK from : https://github.com/JohnEarnest/ok
 "use strict";
 var irc = require('irc');
-var ok = require('./ok/ok');
+var ok = require('./lib/ok/oK');
 
 const MAXLINES = 8;
 
