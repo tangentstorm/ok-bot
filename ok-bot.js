@@ -18,7 +18,7 @@ function runK(src) {
 
 
 client.addListener('message', (from, to, msg)=> {
-  if (to.startsWith('#') && msg.startsWith('k ')) {
+  if (to.startsWith('#') && msg.startsWith('k) ')) {
     var result;
     try { result = runK(msg.substring(2)); }
     catch (err) { result = 'ERROR: ' + err.message; }
