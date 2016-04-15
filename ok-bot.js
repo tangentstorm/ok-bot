@@ -7,7 +7,7 @@ var ok = require('./lib/ok/oK');
 const MAXLINES = 8;
 
 var client = new irc.Client('irc.freenode.net', 'ok-bot', {
-  channels: ['#jsoftware', '#learnprogramming', '#kq']
+  channels: ['#jsoftware', '#learnprogramming', '#kq', '#lpmc']
 });
 
 var env = ok.baseEnv();
