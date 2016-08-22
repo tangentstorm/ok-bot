@@ -1,5 +1,5 @@
 /* jshint esnext: true, node: true */
-// An IRC bot for the k5 programming language,
+// An IRC bot for the k6 programming language,
 // using oK from : https://github.com/JohnEarnest/ok
 "use strict";
 
@@ -8,20 +8,21 @@ const fs = require("fs");
 const irc = require("irc");
 const ok = require("./lib/ok/oK");
 
-const MAX_OUTPUT_LINES = 8;
-const TIMEOUT = 5 * 1000;
 const env = ok.baseEnv();
+
+const MAX_OUTPUT_LINES = 8;
+const TIMEOUT_MS = 5 * 1000;
 
 const runK = (src) => {
   return new Promise((resolve, reject) => {
-    const result = child_process.spawnSync("node",
+    const result = child_process.spawnSync(process.execPath,
                                            ["eval-args.js", src],
-                                           {timeout: TIMEOUT,
+                                           {timeout: TIMEOUT_MS,
                                             encoding: "utf-8"});
 
     if (result.error) {
       if (result.error.code == "ETIMEDOUT") {
-        reject(`Timed out after ${TIMEOUT / 1000} seconds.`);
+        reject(`Timed out after ${TIMEOUT_MS / 1000} seconds.`);
       } else {
         reject(result.error.code);
       }
@@ -40,19 +41,16 @@ fs.readFile("./config.json", (error, raw_data) => {
 
   client.addListener("message", (from, to, msg) => {
     if (to.startsWith("#") && msg.startsWith("k) ")) {
-      runK(msg.substring(2)).then(
-        (result) => {
-          const lines = result.split("\n").slice(0, -1);
-          const line_amount = Math.min(lines.length, MAX_OUTPUT_LINES);
-          for (let i = 0; i < line_amount; ++i) {
-            client.say(to, `${from}: ${lines[i]}`);
-          }
-          if (lines.length > MAX_OUTPUT_LINES) client.say(to, `${from}: ...`);
-        },
-        (err) => {
-          client.say(to, `${from}: ERROR: ${err}`);
+      runK(msg.substring(2)).then((result) => {
+        const lines = result.split("\n").slice(0, -1);
+        const line_amount = Math.min(lines.length, MAX_OUTPUT_LINES);
+        for (let i = 0; i < line_amount; ++i) {
+          client.say(to, `${from}: ${lines[i]}`);
         }
-      );
+        if (lines.length > MAX_OUTPUT_LINES) client.say(to, `${from}: ...`);
+      }).catch((err) => {
+        client.say(to, `${from}: ERROR: ${err}`);
+      });
     }
   });
 });
