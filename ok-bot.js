@@ -8,7 +8,7 @@ const fs = require("fs");
 const irc = require("irc");
 const ok = require("./lib/ok/oK");
 
-const env = ok.baseEnv();
+let env = ok.baseEnv();
 
 const MAX_OUTPUT_LINES = 8;
 const TIMEOUT_MS = 5 * 1000;
@@ -16,7 +16,7 @@ const TIMEOUT_MS = 5 * 1000;
 const runK = (src) => {
   return new Promise((resolve, reject) => {
     const result = child_process.spawnSync(process.execPath,
-                                           ["eval-args.js", src],
+                                           ["eval-args.js", src, JSON.stringify(env.d)],
                                            {timeout: TIMEOUT_MS,
                                             encoding: "utf-8"});
 
@@ -27,7 +27,9 @@ const runK = (src) => {
         reject(result.error.code);
       }
     } else {
-      resolve(result.stdout);
+      const json_result = JSON.parse(result.stdout);
+      env.d = json_result.environment;
+      resolve(json_result.output);
     }
   });
 };
